@@ -1,13 +1,18 @@
 #include "main.h"
+#include "Robot.hpp"
+
+static pros::Controller primary_controller(pros::E_CONTROLLER_MASTER);
 
 void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
+    
+}
+
+void on_right_button() {
+
+}
+
+void on_left_button() {
+
 }
 
 /**
@@ -20,7 +25,13 @@ void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 
+	pros::lcd::register_btn0_cb(on_left_button);
 	pros::lcd::register_btn1_cb(on_center_button);
+	pros::lcd::register_btn2_cb(on_right_button);
+
+    while (1) {
+        Robot::singleton().forward(primary_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+    }
 }
 
 /**
