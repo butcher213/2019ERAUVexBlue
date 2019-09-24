@@ -64,7 +64,7 @@ void intakeControl() {
     if (primary_controller.get_digital(ROBOT_CONTROL_INTAKE_PULL))
         intakeVelocity = Robot::INTAKE_PULL;
     else if (primary_controller.get_digital(ROBOT_CONTROL_INTAKE_PUSH))
-        intakeVelocity = Robot::INTAKE_PUSH;
+        intakeVelocity = Robot::INTAKE_PUSH * 0.5;
     else
         intakeVelocity = 0;
 

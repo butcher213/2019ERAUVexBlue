@@ -4,7 +4,7 @@
 static pros::Controller primary_controller(pros::E_CONTROLLER_MASTER);
 
 void on_center_button() {
-    
+
 }
 
 void on_right_button() {
@@ -29,9 +29,9 @@ void initialize() {
 	pros::lcd::register_btn1_cb(on_center_button);
 	pros::lcd::register_btn2_cb(on_right_button);
 
-    while (1) {
-        Robot::singleton().forward(primary_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
-    }
+    // while (1) {
+        // Robot::singleton().forward(primary_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+    // }
 }
 
 /**
