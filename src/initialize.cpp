@@ -3,6 +3,7 @@
 #include <cmath>
 #include "main.h"
 #include "Robot.hpp"
+#include "Bash.hpp"
 
 
 static pros::Controller primary_controller(pros::E_CONTROLLER_MASTER);
@@ -29,54 +30,74 @@ void on_left_button() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-// void mapJoyInput(int x, int y) {
-    // float max = std::max(std::abs(x), std::abs(y));
-    //
-    // if (max != 0) {
-    //     float r = std::sqrt(x*x + y*y);
-    //     int x_ = r / max * x;
-    //     int y_ = r / max * y;
-    //
-    //     printf(" | %4d  %4d", x_, y_);
-    //     if (r > 127) {
-    //         std::cout << "<";
-    //     }
-    //     else {
-    //         std::cout << " ";
-    //     }
-    // }
-    // else {
-    //     std::cout << " |    -     - ";
-    // }
-// }
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
-
-	pros::lcd::register_btn0_cb(on_left_button);
-	pros::lcd::register_btn1_cb(on_center_button);
-	pros::lcd::register_btn2_cb(on_right_button);
-
-
-    // static const int START = -127;
-    // static const int STOP = 127;
-    // static const float STEP = 127/8;
-
-    // std::cout << "   \\ X";
-    // for (float x = START; x <= STOP; x += STEP)
-    //     printf("%7d       ", (int) x);
-    // std::cout << "  Y \\" << std::endl;
+	// pros::lcd::initialize();
+	// pros::lcd::set_text(1, "Hello PROS User!");
     //
-    // for (float y = START; y <= STOP; y += STEP) {
-    //     printf("%4d", (int) y);
-    //     for (float x = START; x <= STOP; x += STEP) {
-    //         mapJoyInput(x, y);
-    //     }
-    //     std::cout << std::endl << std::endl;
-    // }
+	// pros::lcd::register_btn0_cb(on_left_button);
+	// pros::lcd::register_btn1_cb(on_center_button);
+	// pros::lcd::register_btn2_cb(on_right_button);
+
+    Bash::initGUI();
+}
+
+/**
+ * Runs while the robot is in the disabled state of Field Management System or
+ * the VEX Competition Switch, following either autonomous or opcontrol. When
+ * the robot is enabled, this task will exit.
+ */
+void disabled() {}
 
 
-    /*while (1) {
+void mapJoyInput(int x, int y) {
+   float max = std::max(std::abs(x), std::abs(y));
+
+   if (max != 0) {
+       float r = std::sqrt(x*x + y*y);
+       int x_ = r / max * x;
+       int y_ = r / max * y;
+
+       printf(" | %4d  %4d", x_, y_);
+       if (r > 127) {
+           std::cout << "<";
+       }
+       else {
+           std::cout << " ";
+       }
+   }
+   else {
+       std::cout << " |    -     - ";
+   }
+}
+/**
+ * Runs after initialize(), and before autonomous when connected to the Field
+ * Management System or the VEX Competition Switch. This is intended for
+ * competition-specific initialization routines, such as an autonomous selector
+ * on the LCD.
+ *
+ * This task will exit when the robot is enabled and autonomous or opcontrol
+ * starts.
+ */
+void competition_initialize() {
+    static const int START = -127;
+    static const int STOP = 127;
+    static const float STEP = 127/8;
+
+    std::cout << "   \\ X";
+    for (float x = START; x <= STOP; x += STEP)
+        printf("%7d       ", (int) x);
+    std::cout << "  Y \\" << std::endl;
+
+    for (float y = START; y <= STOP; y += STEP) {
+        printf("%4d", (int) y);
+        for (float x = START; x <= STOP; x += STEP) {
+            mapJoyInput(x, y);
+        }
+        std::cout << std::endl << std::endl;
+    }
+
+
+    while (1) {
         float x = primary_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
         float y = primary_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         float r = sqrt(x*x + y*y);
@@ -103,23 +124,5 @@ void initialize() {
             pros::lcd::set_text(0, str1.str());
             pros::lcd::set_text(1, str2.str());
         }
-    }*/
+    }
 }
-
-/**
- * Runs while the robot is in the disabled state of Field Management System or
- * the VEX Competition Switch, following either autonomous or opcontrol. When
- * the robot is enabled, this task will exit.
- */
-void disabled() {}
-
-/**
- * Runs after initialize(), and before autonomous when connected to the Field
- * Management System or the VEX Competition Switch. This is intended for
- * competition-specific initialization routines, such as an autonomous selector
- * on the LCD.
- *
- * This task will exit when the robot is enabled and autonomous or opcontrol
- * starts.
- */
-void competition_initialize() {}
