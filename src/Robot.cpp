@@ -71,6 +71,12 @@ void Robot::rotate(int velocity) {
         backRight.move(-velocity);
     }
 }
+void Robot::drive(int forwardVal, int strafeVal, int rotateVal) {
+    frontLeft.move(forwardVal + strafeVal + rotateVal);
+    frontRight.move(forwardVal - strafeVal - rotateVal);
+    backLeft.move(forwardVal - strafeVal + rotateVal);
+    backRight.move(forwardVal + strafeVal - rotateVal);
+}
 
 //****************************************
 // Autonomous control function definitions

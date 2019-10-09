@@ -1,6 +1,20 @@
 #include "main.h"
 #include "Robot.hpp"
 
+
+/*
+float max = max(x, y)
+
+float maxX = x / max * 127
+float maxY = y / max * 127
+
+float newX = r/R * maxX
+float newY = r/R * maxY
+
+// r/R magnitude / 127
+*/
+
+
 #define ROBOT_CONTROL_FORWARD (pros::E_CONTROLLER_ANALOG_LEFT_Y)
 #define ROBOT_CONTROL_STRAFE  (pros::E_CONTROLLER_ANALOG_LEFT_X)
 #define ROBOT_CONTROL_ROTATE  (pros::E_CONTROLLER_ANALOG_RIGHT_X)
@@ -27,9 +41,12 @@ static pros::Controller secondary_controller(pros::E_CONTROLLER_PARTNER);
 
 
 void driveControl() {
-    Robot::singleton().forward(primary_controller.get_analog(ROBOT_CONTROL_FORWARD));
-    Robot::singleton().strafe(primary_controller.get_analog(ROBOT_CONTROL_STRAFE));
-    Robot::singleton().rotate(primary_controller.get_analog(ROBOT_CONTROL_ROTATE));
+    // Robot::singleton().forward(primary_controller.get_analog(ROBOT_CONTROL_FORWARD));
+    // Robot::singleton().strafe(primary_controller.get_analog(ROBOT_CONTROL_STRAFE));
+    // Robot::singleton().rotate(primary_controller.get_analog(ROBOT_CONTROL_ROTATE));
+    Robot::singleton().drive(primary_controller.get_analog(ROBOT_CONTROL_FORWARD),
+                             primary_controller.get_analog(ROBOT_CONTROL_STRAFE),
+                             primary_controller.get_analog(ROBOT_CONTROL_ROTATE));
 }
 
 void trayControl() {

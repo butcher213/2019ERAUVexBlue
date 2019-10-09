@@ -50,10 +50,10 @@ private:
     //*******************
     // Drive train motors
     //*******************
-    pros::Motor frontLeft  = pros::Motor(MOTOR_FRONT_LEFT_PORT);
-    pros::Motor frontRight = pros::Motor(MOTOR_FRONT_RIGHT_PORT);
-    pros::Motor backLeft   = pros::Motor(MOTOR_BACK_LEFT_PORT);
-    pros::Motor backRight  = pros::Motor(MOTOR_BACK_RIGHT_PORT);
+    pros::Motor frontLeft  = pros::Motor(MOTOR_FRONT_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
+    pros::Motor frontRight = pros::Motor(MOTOR_FRONT_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
+    pros::Motor backLeft   = pros::Motor(MOTOR_BACK_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
+    pros::Motor backRight  = pros::Motor(MOTOR_BACK_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
 
     //*********************
     // Tray actuator motors
@@ -120,6 +120,7 @@ public:
     void forward(int velocity);
     void strafe(int velocity);
     void rotate(int velocity);
+    void drive(int forwardVal, int strafeVal, int rotateVal);
 
     //*****************************
     // Autonomous control functions
