@@ -3,29 +3,29 @@
 //*********************************
 // Drive train constant definitions
 //*********************************
-const int Robot::MOVE_FORWARD = 127; // TODO check value correct
+const int Robot::MOVE_FORWARD = 127;
 const int Robot::MOVE_BACKWARD = -Robot::MOVE_FORWARD;
-const int Robot::STRAFE_RIGHT = 127; // TODO check value correct
+const int Robot::STRAFE_RIGHT = 127;
 const int Robot::STRAFE_LEFT = -Robot::STRAFE_RIGHT;
-const int Robot::ROTATE_CW = 127; // TODO check value correct
+const int Robot::ROTATE_CW = 127;
 const int Robot::ROTATE_CCW = -Robot::ROTATE_CW;
 
 //***********************************
 // Tray actuator constant definitions
 //***********************************
-const int Robot::TRAY_RAISE = 127; // TODO check value correct
+const int Robot::TRAY_RAISE = 127;
 const int Robot::TRAY_LOWER = -Robot::TRAY_RAISE;
 
 //**************************
 // Lift constant definitions
 //**************************
-const int Robot::LIFT_RAISE = 127; // TODO check value correct
+const int Robot::LIFT_RAISE = 127;
 const int Robot::LIFT_LOWER = -Robot::LIFT_RAISE;
 
 //****************************
 // Intake constant definitions
 //****************************
-const int Robot::INTAKE_PULL = 127; // TODO check value correct
+const int Robot::INTAKE_PULL = 127;
 const int Robot::INTAKE_PUSH = -Robot::INTAKE_PULL;
 
 //***************************
@@ -179,10 +179,11 @@ void Robot::actuateTray(int velocity) {
 // Lift function definitions
 //**************************
 void Robot::liftVelocity(int velocity) {
-    // if (liftBottomLimiter.get_value() == LOW && velocity < 0)
-    //     return;
+    if (liftBottomLimiter.get_value() == LOW && velocity < 0)
+        return;
 
-    lift.move(velocity);
+    liftLeft.move(velocity);
+    liftRight.move(velocity);
 }
 
 //****************************

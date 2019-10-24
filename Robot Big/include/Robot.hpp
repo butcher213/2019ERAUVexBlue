@@ -30,21 +30,23 @@
 // Tray actuator port
 //*******************
 #define MOTOR_TRAY_ACTUATOR_PORT (5)
+#define TRAY_LOWER_LIMITER_PORT ('B')
 
 //**********
 // Lift port
 //**********
-#define LIFT_PORT (6)
+#define LIFT_PORT_LEFT (6)
+#define LIFT_PORT_RIGHT (7)
 
 // Limit switch under lift that prevents lift
 //  stall/break when lowering
-//#define LIFT_BOTTOM_LIMITER_PORT (1)
+#define LIFT_BOTTOM_LIMITER_PORT ('A')
 
 //************
 // Intake port
 //************
-#define INTAKE_PORT_1 (7)
-#define INTAKE_PORT_2 (8)
+#define INTAKE_PORT_1 (8)
+#define INTAKE_PORT_2 (9)
 
 
 // This class holds functions and constants
@@ -54,7 +56,8 @@ private:
     //**************
     // Robot sensors
     //**************
-    // pros::ADIDigitalIn liftBottomLimiter(LIFT_BOTTOM_LIMITER_PORT);
+    pros::ADIDigitalIn liftBottomLimiter = pros::ADIDigitalIn(LIFT_BOTTOM_LIMITER_PORT);
+    pros::ADIDigitalIn trayLowerLimiter = pros::ADIDigitalIn(TRAY_LOWER_LIMITER_PORT);
 
     //*******************
     // Drive train motors
@@ -72,7 +75,8 @@ private:
     //***********
     // Lift motor
     //***********
-    pros::Motor lift = pros::Motor(LIFT_PORT);
+    pros::Motor liftLeft = pros::Motor(LIFT_PORT_LEFT);
+    pros::Motor liftRight = pros::Motor(LIFT_PORT_RIGHT);
 
     //*************
     // Intake motor
