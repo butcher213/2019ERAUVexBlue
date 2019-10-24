@@ -72,10 +72,27 @@ void Robot::rotate(int velocity) {
     }
 }
 void Robot::drive(int forwardVal, int strafeVal, int rotateVal) {
-    frontLeft.move(forwardVal + strafeVal + rotateVal);
-    frontRight.move(forwardVal - strafeVal - rotateVal);
-    backLeft.move(forwardVal - strafeVal + rotateVal);
-    backRight.move(forwardVal + strafeVal - rotateVal);
+    int fl = forwardVal + strafeVal + rotateVal,
+        fr = forwardVal - strafeVal - rotateVal,
+        bl = forwardVal - strafeVal + rotateVal,
+        br = forwardVal + strafeVal - rotateVal;
+
+    if (fl > 127) fl = 127;
+    else if (fl < -127) fl = -127;
+
+    if (fr > 127) fr = 127;
+    else if (fr < -127) fr = -127;
+
+    if (bl > 127) bl = 127;
+    else if (bl < -127) bl = -127;
+
+    if (br > 127) br = 127;
+    else if (br < -127) br = -127;
+
+    frontLeft.move(fl);
+    frontRight.move(fr);
+    backLeft.move(bl);
+    backRight.move(br);
 }
 
 //****************************************
@@ -162,6 +179,9 @@ void Robot::actuateTray(int velocity) {
 // Lift function definitions
 //**************************
 void Robot::liftVelocity(int velocity) {
+    // if (liftBottomLimiter.get_value() == LOW && velocity < 0)
+    //     return;
+
     lift.move(velocity);
 }
 

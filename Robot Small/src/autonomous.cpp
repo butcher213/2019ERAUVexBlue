@@ -1,4 +1,5 @@
 #include "main.h"
+#include "Robot.hpp"
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -11,4 +12,10 @@
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+    Robot::singleton().forward(127);
+    pros::delay(5);
+    Robot::singleton().forward(-127);
+    pros::delay(5);
+    Robot::singleton().forward(0);
+}

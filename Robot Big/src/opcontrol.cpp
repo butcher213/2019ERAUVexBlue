@@ -41,9 +41,6 @@ static pros::Controller secondary_controller(pros::E_CONTROLLER_PARTNER);
 
 
 void driveControl() {
-    // Robot::singleton().forward(primary_controller.get_analog(ROBOT_CONTROL_FORWARD));
-    // Robot::singleton().strafe(primary_controller.get_analog(ROBOT_CONTROL_STRAFE));
-    // Robot::singleton().rotate(primary_controller.get_analog(ROBOT_CONTROL_ROTATE));
     Robot::singleton().drive(primary_controller.get_analog(ROBOT_CONTROL_FORWARD),
                              primary_controller.get_analog(ROBOT_CONTROL_STRAFE),
                              primary_controller.get_analog(ROBOT_CONTROL_ROTATE));

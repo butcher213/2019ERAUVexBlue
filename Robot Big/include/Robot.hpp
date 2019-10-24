@@ -36,6 +36,10 @@
 //**********
 #define LIFT_PORT (6)
 
+// Limit switch under lift that prevents lift
+//  stall/break when lowering
+//#define LIFT_BOTTOM_LIMITER_PORT (1)
+
 //************
 // Intake port
 //************
@@ -47,6 +51,11 @@
 //  related to a robot
 class Robot {
 private:
+    //**************
+    // Robot sensors
+    //**************
+    // pros::ADIDigitalIn liftBottomLimiter(LIFT_BOTTOM_LIMITER_PORT);
+
     //*******************
     // Drive train motors
     //*******************
@@ -58,7 +67,7 @@ private:
     //*********************
     // Tray actuator motors
     //*********************
-    pros::Motor actuator = pros::Motor(MOTOR_TRAY_ACTUATOR_PORT);
+    pros::Motor actuator = pros::Motor(MOTOR_TRAY_ACTUATOR_PORT, pros::E_MOTOR_GEARSET_36, true);
 
     //***********
     // Lift motor
@@ -68,8 +77,8 @@ private:
     //*************
     // Intake motor
     //*************
-    pros::Motor intakeLeft  = pros::Motor(INTAKE_PORT_1);
-    pros::Motor intakeRight = pros::Motor(INTAKE_PORT_2);
+    pros::Motor intakeLeft  = pros::Motor(INTAKE_PORT_1, pros::E_MOTOR_GEARSET_18, true);
+    pros::Motor intakeRight = pros::Motor(INTAKE_PORT_2, pros::E_MOTOR_GEARSET_18, false);
 
     //****************
     // Singleton robot

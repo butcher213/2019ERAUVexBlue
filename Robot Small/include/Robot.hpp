@@ -58,7 +58,7 @@ private:
     //*********************
     // Tray actuator motors
     //*********************
-    pros::Motor actuator = pros::Motor(MOTOR_TRAY_ACTUATOR_PORT);
+    pros::Motor actuator = pros::Motor(MOTOR_TRAY_ACTUATOR_PORT, pros::E_MOTOR_GEARSET_36, true);
 
     //***********
     // Lift motor
