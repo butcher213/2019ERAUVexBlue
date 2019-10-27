@@ -75,8 +75,8 @@ private:
     //***********
     // Lift motor
     //***********
-    pros::Motor liftLeft = pros::Motor(LIFT_PORT_LEFT);
-    pros::Motor liftRight = pros::Motor(LIFT_PORT_RIGHT);
+    pros::Motor liftLeft = pros::Motor(LIFT_PORT_LEFT, pros::E_MOTOR_GEARSET_36, false);
+    pros::Motor liftRight = pros::Motor(LIFT_PORT_RIGHT, pros::E_MOTOR_GEARSET_36, true);
 
     //*************
     // Intake motor

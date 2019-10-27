@@ -14,7 +14,7 @@ const int Robot::ROTATE_CCW = -Robot::ROTATE_CW;
 //***********************************
 // Tray actuator constant definitions
 //***********************************
-const int Robot::TRAY_RAISE = 127/4; // TODO check value correct
+const int Robot::TRAY_RAISE = 127/2; // TODO check value correct
 const int Robot::TRAY_LOWER = -Robot::TRAY_RAISE;
 
 //**************************

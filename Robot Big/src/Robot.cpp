@@ -179,7 +179,7 @@ void Robot::actuateTray(int velocity) {
 // Lift function definitions
 //**************************
 void Robot::liftVelocity(int velocity) {
-    if (liftBottomLimiter.get_value() == LOW && velocity < 0)
+    if (liftBottomLimiter.get_value() == HIGH && velocity < 0)
         return;
 
     liftLeft.move(velocity);
