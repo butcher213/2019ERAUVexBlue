@@ -14,13 +14,13 @@ const int Robot::ROTATE_CCW = -Robot::ROTATE_CW;
 //***********************************
 // Tray actuator constant definitions
 //***********************************
-const int Robot::TRAY_RAISE = 127; // TODO check value correct
+const int Robot::TRAY_RAISE = 127/4; // TODO check value correct
 const int Robot::TRAY_LOWER = -Robot::TRAY_RAISE;
 
 //**************************
 // Lift constant definitions
 //**************************
-const int Robot::LIFT_RAISE = 127; // TODO check value correct
+const int Robot::LIFT_RAISE = 127/2; // TODO check value correct
 const int Robot::LIFT_LOWER = -Robot::LIFT_RAISE;
 
 //****************************
@@ -308,7 +308,8 @@ void Robot::actuateTray(int velocity) {
 // Lift function definitions
 //**************************
 void Robot::liftVelocity(int velocity) {
-    lift.move(velocity);
+    liftRight.move(velocity);
+    liftLeft.move(velocity);
 }
 
 //****************************

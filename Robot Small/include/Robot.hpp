@@ -34,13 +34,14 @@
 //**********
 // Lift port
 //**********
-#define LIFT_PORT (6)
+#define LIFT_LEFT_PORT (6)
+#define LIFT_RIGHT_PORT (7)
 
 //************
 // Intake port
 //************
-#define INTAKE_PORT_1 (7)
-#define INTAKE_PORT_2 (8)
+#define INTAKE_LEFT_PORT (8)
+#define INTAKE_RIGHT_PORT (9)
 
 
 // This class holds functions and constants
@@ -63,13 +64,14 @@ private:
     //***********
     // Lift motor
     //***********
-    pros::Motor lift = pros::Motor(LIFT_PORT);
+    pros::Motor liftRight = pros::Motor(LIFT_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
+    pros::Motor liftLeft = pros::Motor(LIFT_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
 
     //*************
     // Intake motor
     //*************
-    pros::Motor intakeLeft  = pros::Motor(INTAKE_PORT_1);
-    pros::Motor intakeRight = pros::Motor(INTAKE_PORT_2);
+    pros::Motor intakeLeft  = pros::Motor(INTAKE_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
+    pros::Motor intakeRight = pros::Motor(INTAKE_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
 
     //****************
     // Singleton robot
