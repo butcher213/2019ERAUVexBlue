@@ -8,7 +8,8 @@ const int Robot::MOVE_FORWARD = 127; // TODO check value correct
 const int Robot::MOVE_BACKWARD = -Robot::MOVE_FORWARD;
 const int Robot::STRAFE_RIGHT = 127; // TODO check value correct
 const int Robot::STRAFE_LEFT = -Robot::STRAFE_RIGHT;
-const int Robot::ROTATE_CW = 127; // TODO check value correct
+static const float ROTATE_MULT = .6;
+const int Robot::ROTATE_CW = ROTATE_MULT * 127; // TODO check value correct
 const int Robot::ROTATE_CCW = -Robot::ROTATE_CW;
 
 //***********************************
@@ -18,10 +19,10 @@ const int Robot::TRAY_RAISE = 127/2; // TODO check value correct
 const int Robot::TRAY_LOWER = -Robot::TRAY_RAISE;
 
 //**************************
-// Lift constant definitions
+// Arm constant definitions
 //**************************
-const int Robot::LIFT_RAISE = 127/2; // TODO check value correct
-const int Robot::LIFT_LOWER = -Robot::LIFT_RAISE;
+const int Robot::ARM_RAISE = 127;
+const int Robot::ARM_LOWER = -Robot::ARM_RAISE;
 
 //****************************
 // Intake constant definitions
@@ -305,11 +306,11 @@ void Robot::actuateTray(int velocity) {
 }
 
 //**************************
-// Lift function definitions
+// Arm function definitions
 //**************************
-void Robot::liftVelocity(int velocity) {
-    liftRight.move(velocity);
-    liftLeft.move(velocity);
+void Robot::armVelocity(int velocity) {
+    armRight.move(velocity);
+    armLeft.move(velocity);
 }
 
 //****************************

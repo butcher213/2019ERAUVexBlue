@@ -32,15 +32,15 @@
 #define MOTOR_TRAY_ACTUATOR_PORT (5)
 #define TRAY_LOWER_LIMITER_PORT ('B')
 
-//**********
-// Lift port
-//**********
-#define LIFT_PORT_LEFT (6)
-#define LIFT_PORT_RIGHT (7)
+//*********
+// Arm port
+//*********
+#define ARM_PORT_LEFT (6)
+#define ARM_PORT_RIGHT (7)
 
-// Limit switch under lift that prevents lift
+// Limit switch under arm that prevents arm
 //  stall/break when lowering
-#define LIFT_BOTTOM_LIMITER_PORT ('A')
+#define ARM_BOTTOM_LIMITER_PORT ('A')
 
 //************
 // Intake port
@@ -56,7 +56,7 @@ private:
     //**************
     // Robot sensors
     //**************
-    pros::ADIDigitalIn liftBottomLimiter = pros::ADIDigitalIn(LIFT_BOTTOM_LIMITER_PORT);
+    pros::ADIDigitalIn armBottomLimiter = pros::ADIDigitalIn(ARM_BOTTOM_LIMITER_PORT);
     pros::ADIDigitalIn trayLowerLimiter = pros::ADIDigitalIn(TRAY_LOWER_LIMITER_PORT);
 
     //*******************
@@ -73,10 +73,10 @@ private:
     pros::Motor actuator = pros::Motor(MOTOR_TRAY_ACTUATOR_PORT, pros::E_MOTOR_GEARSET_36, true);
 
     //***********
-    // Lift motor
+    // Arm motor
     //***********
-    pros::Motor liftLeft = pros::Motor(LIFT_PORT_LEFT, pros::E_MOTOR_GEARSET_36, false);
-    pros::Motor liftRight = pros::Motor(LIFT_PORT_RIGHT, pros::E_MOTOR_GEARSET_36, true);
+    pros::Motor armLeft = pros::Motor(ARM_PORT_LEFT, pros::E_MOTOR_GEARSET_36, false);
+    pros::Motor armRight = pros::Motor(ARM_PORT_RIGHT, pros::E_MOTOR_GEARSET_36, true);
 
     //*************
     // Intake motor
@@ -111,10 +111,10 @@ public:
     static const int TRAY_LOWER;
 
     //***************
-    // Lift constants
+    // Arm constants
     //***************
-    static const int LIFT_RAISE;
-    static const int LIFT_LOWER;
+    static const int ARM_RAISE;
+    static const int ARM_LOWER;
 
     //*****************
     // Intake constants
@@ -154,9 +154,9 @@ public:
     void actuateTray(int velocity);
 
     //***************
-    // Lift functions
+    // Arm functions
     //***************
-    void liftVelocity(int velocity);
+    void armVelocity(int velocity);
 
     //*****************
     // Intake functions

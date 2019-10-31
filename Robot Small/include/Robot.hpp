@@ -32,10 +32,10 @@
 #define MOTOR_TRAY_ACTUATOR_PORT (5)
 
 //**********
-// Lift port
+// Arm port
 //**********
-#define LIFT_LEFT_PORT (6)
-#define LIFT_RIGHT_PORT (7)
+#define ARM_LEFT_PORT (6)
+#define ARM_RIGHT_PORT (7)
 
 //************
 // Intake port
@@ -61,11 +61,11 @@ private:
     //*********************
     pros::Motor actuator = pros::Motor(MOTOR_TRAY_ACTUATOR_PORT, pros::E_MOTOR_GEARSET_36, true);
 
-    //***********
-    // Lift motor
-    //***********
-    pros::Motor liftRight = pros::Motor(LIFT_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
-    pros::Motor liftLeft = pros::Motor(LIFT_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
+    //**********
+    // Arm motor
+    //**********
+    pros::Motor armRight = pros::Motor(ARM_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
+    pros::Motor armLeft = pros::Motor(ARM_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
 
     //*************
     // Intake motor
@@ -100,10 +100,10 @@ public:
     static const int TRAY_LOWER;
 
     //***************
-    // Lift constants
+    // Arm constants
     //***************
-    static const int LIFT_RAISE;
-    static const int LIFT_LOWER;
+    static const int ARM_RAISE;
+    static const int ARM_LOWER;
 
     //*****************
     // Intake constants
@@ -143,9 +143,9 @@ public:
     void actuateTray(int velocity);
 
     //***************
-    // Lift functions
+    // Arm functions
     //***************
-    void liftVelocity(int velocity);
+    void armVelocity(int velocity);
 
     //*****************
     // Intake functions

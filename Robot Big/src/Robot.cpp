@@ -7,7 +7,8 @@ const int Robot::MOVE_FORWARD = 127;
 const int Robot::MOVE_BACKWARD = -Robot::MOVE_FORWARD;
 const int Robot::STRAFE_RIGHT = 127;
 const int Robot::STRAFE_LEFT = -Robot::STRAFE_RIGHT;
-const int Robot::ROTATE_CW = 127;
+static const float ROTATE_MULT = .6;
+const int Robot::ROTATE_CW = ROTATE_MULT * 127;
 const int Robot::ROTATE_CCW = -Robot::ROTATE_CW;
 
 //***********************************
@@ -17,15 +18,16 @@ const int Robot::TRAY_RAISE = 127;
 const int Robot::TRAY_LOWER = -Robot::TRAY_RAISE;
 
 //**************************
-// Lift constant definitions
+// Arm constant definitions
 //**************************
-const int Robot::LIFT_RAISE = 127;
-const int Robot::LIFT_LOWER = -Robot::LIFT_RAISE;
+const int Robot::ARM_RAISE = 127;
+const int Robot::ARM_LOWER = -Robot::ARM_RAISE;
 
 //****************************
 // Intake constant definitions
 //****************************
-const int Robot::INTAKE_PULL = 127;
+static float INTAKE_MULT = .75;
+const int Robot::INTAKE_PULL = INTAKE_MULT * 127;
 const int Robot::INTAKE_PUSH = -Robot::INTAKE_PULL;
 
 //***************************
@@ -176,14 +178,14 @@ void Robot::actuateTray(int velocity) {
 }
 
 //**************************
-// Lift function definitions
+// Arm function definitions
 //**************************
-void Robot::liftVelocity(int velocity) {
-    if (liftBottomLimiter.get_value() == HIGH && velocity < 0)
+void Robot::armVelocity(int velocity) {
+    if (armBottomLimiter.get_value() == HIGH && velocity < 0)
         return;
 
-    liftLeft.move(velocity);
-    liftRight.move(velocity);
+    armLeft.move(velocity);
+    armRight.move(velocity);
 }
 
 //****************************

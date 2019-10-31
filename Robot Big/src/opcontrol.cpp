@@ -22,11 +22,11 @@ float newY = r/R * maxY
 #define ROBOT_CONTROL_TRAY_RAISE (pros::E_CONTROLLER_DIGITAL_A)
 #define ROBOT_CONTROL_TRAY_LOWER (pros::E_CONTROLLER_DIGITAL_B)
 
-#define ROBOT_CONTROL_LIFT_RAISE (pros::E_CONTROLLER_DIGITAL_L1)
-#define ROBOT_CONTROL_LIFT_LOWER (pros::E_CONTROLLER_DIGITAL_L2)
+#define ROBOT_CONTROL_ARM_RAISE (pros::E_CONTROLLER_DIGITAL_L1)
+#define ROBOT_CONTROL_ARM_LOWER (pros::E_CONTROLLER_DIGITAL_L2)
 
-#define ROBOT_CONTROL_INTAKE_PULL (pros::E_CONTROLLER_DIGITAL_R2)
-#define ROBOT_CONTROL_INTAKE_PUSH (pros::E_CONTROLLER_DIGITAL_R1)
+#define ROBOT_CONTROL_INTAKE_PULL (pros::E_CONTROLLER_DIGITAL_R1)
+#define ROBOT_CONTROL_INTAKE_PUSH (pros::E_CONTROLLER_DIGITAL_R2)
 
 
 //******************************
@@ -59,17 +59,17 @@ void trayControl() {
     Robot::singleton().actuateTray(trayActuatorVelocity);
 }
 
-void liftControl() {
-    int liftVelocity;
+void armControl() {
+    int armVelocity;
 
-    if (primary_controller.get_digital(ROBOT_CONTROL_LIFT_RAISE))
-        liftVelocity = Robot::LIFT_RAISE;
-    else if (primary_controller.get_digital(ROBOT_CONTROL_LIFT_LOWER))
-        liftVelocity = Robot::LIFT_LOWER;
+    if (primary_controller.get_digital(ROBOT_CONTROL_ARM_RAISE))
+        armVelocity = Robot::ARM_RAISE;
+    else if (primary_controller.get_digital(ROBOT_CONTROL_ARM_LOWER))
+        armVelocity = Robot::ARM_LOWER;
     else
-        liftVelocity = 0;
+        armVelocity = 0;
 
-    Robot::singleton().liftVelocity(liftVelocity);
+    Robot::singleton().armVelocity(armVelocity);
 }
 
 void intakeControl() {
@@ -105,7 +105,7 @@ void opcontrol() {
 
         trayControl();
 
-        liftControl();
+        armControl();
 
         intakeControl();
 
