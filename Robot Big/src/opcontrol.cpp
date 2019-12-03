@@ -41,9 +41,9 @@ static pros::Controller secondary_controller(pros::E_CONTROLLER_PARTNER);
 
 
 void driveControl() {
-    Robot::singleton().drive(primary_controller.get_analog(ROBOT_CONTROL_FORWARD),
-                             primary_controller.get_analog(ROBOT_CONTROL_STRAFE),
-                             primary_controller.get_analog(ROBOT_CONTROL_ROTATE));
+    Robot::drive(primary_controller.get_analog(ROBOT_CONTROL_FORWARD),
+                 primary_controller.get_analog(ROBOT_CONTROL_STRAFE),
+                 primary_controller.get_analog(ROBOT_CONTROL_ROTATE));
 }
 
 void trayControl() {
@@ -56,7 +56,7 @@ void trayControl() {
     else
         trayActuatorVelocity = 0;
 
-    Robot::singleton().actuateTray(trayActuatorVelocity);
+    Robot::actuateTray(trayActuatorVelocity);
 }
 
 void armControl() {
@@ -67,9 +67,9 @@ void armControl() {
     else if (primary_controller.get_digital(ROBOT_CONTROL_ARM_LOWER))
         armVelocity = Robot::ARM_LOWER;
     else
-        armVelocity = 0;
+        armVelocity = .1 * Robot::ARM_RAISE;
 
-    Robot::singleton().armVelocity(armVelocity);
+    Robot::armVelocity(armVelocity);
 }
 
 void intakeControl() {
@@ -78,11 +78,11 @@ void intakeControl() {
     if (primary_controller.get_digital(ROBOT_CONTROL_INTAKE_PULL))
         intakeVelocity = Robot::INTAKE_PULL;
     else if (primary_controller.get_digital(ROBOT_CONTROL_INTAKE_PUSH))
-        intakeVelocity = Robot::INTAKE_PUSH * 0.5;
+        intakeVelocity = 0.5 * Robot::INTAKE_PUSH;
     else
         intakeVelocity = 0;
 
-    Robot::singleton().intakeVelocity(intakeVelocity);
+    Robot::intakeVelocity(intakeVelocity);
 }
 
 
@@ -112,10 +112,3 @@ void opcontrol() {
 		pros::delay(10);
 	}
 }
-
-class DampenedMotor: public pros::Motor {
-public:
-    std::int32_t move_dampened(const std::int8_t voltage) {
-
-    }
-};

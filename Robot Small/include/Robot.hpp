@@ -1,7 +1,9 @@
 #ifndef _ROBOT_HPP_
 #define _ROBOT_HPP_
 
+#include <vector>
 #include "main.h"
+#include "../../g_inc/RampingMotor.cpp"
 
 //******************
 // Drive train ports
@@ -10,21 +12,6 @@
 #define MOTOR_FRONT_RIGHT_PORT (2)
 #define MOTOR_BACK_LEFT_PORT   (3)
 #define MOTOR_BACK_RIGHT_PORT  (4)
-
-//********************
-// Drive train defines
-//********************
-#define ENCODER_COUNTS_PER_INCH   (0)
-#define ENCODER_COUNTS_PER_DEGREE (0)
-#define ENCODER_TARGET_RANGE      (5)
-// Minimun voltage agnitude to make the robot
-//  move when applied to all drive motors
-#define DRIVE_MINIMUM_VOLTAGE     (0) /* TODO: Adjust this voltage */
-// The time that the robot reverses direction
-//  to brake based on the velocity. This value
-//  is multiplied by the value returned by
-//  getDriveVelocity()
-#define DRIVE_VELOCITY_TO_BRAKE_TIME_MS (100) /* TODO Adjust this */
 
 //*******************
 // Tray actuator port
@@ -43,46 +30,57 @@
 #define INTAKE_LEFT_PORT (8)
 #define INTAKE_RIGHT_PORT (9)
 
+//********************
+// Drive train defines
+//********************
+#define ENCODER_COUNTS_PER_INCH   (0)
+#define ENCODER_COUNTS_PER_DEGREE (0)
+#define ENCODER_TARGET_RANGE      (5)
+// Minimun voltage agnitude to make the robot
+//  move when applied to all drive motors
+#define DRIVE_MINIMUM_VOLTAGE     (0) /* TODO: Adjust this voltage */
+// The time that the robot reverses direction
+//  to brake based on the velocity. This value
+//  is multiplied by the value returned by
+//  getDriveVelocity()
+#define DRIVE_VELOCITY_TO_BRAKE_TIME_MS (100) /* TODO Adjust this */
+#define DRIVE_RAMP_SCALE (127 / 10)
+
 
 // This class holds functions and constants
 //  related to a robot
 class Robot {
 private:
-    //*******************
-    // Drive train motors
-    //*******************
-    pros::Motor frontLeft  = pros::Motor(MOTOR_FRONT_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
-    pros::Motor frontRight = pros::Motor(MOTOR_FRONT_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
-    pros::Motor backLeft   = pros::Motor(MOTOR_BACK_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
-    pros::Motor backRight  = pros::Motor(MOTOR_BACK_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
-
-    //*********************
-    // Tray actuator motors
-    //*********************
-    pros::Motor actuator = pros::Motor(MOTOR_TRAY_ACTUATOR_PORT, pros::E_MOTOR_GEARSET_36, true);
-
-    //**********
-    // Arm motor
-    //**********
-    pros::Motor armRight = pros::Motor(ARM_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
-    pros::Motor armLeft = pros::Motor(ARM_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
-
-    //*************
-    // Intake motor
-    //*************
-    pros::Motor intakeLeft  = pros::Motor(INTAKE_LEFT_PORT, pros::E_MOTOR_GEARSET_18, false);
-    pros::Motor intakeRight = pros::Motor(INTAKE_RIGHT_PORT, pros::E_MOTOR_GEARSET_18, true);
-
-    //****************
-    // Singleton robot
-    //****************
-    static Robot robot_singleton;
-
     // Private constructor allows instantiation
     //  only within class
     Robot() {}
 
 public:
+    //*******************
+    // Drive train motors
+    //*******************
+    static RampingMotor frontLeft;
+    static RampingMotor frontRight;
+    static RampingMotor backLeft;
+    static RampingMotor backRight;
+
+    //*********************
+    // Tray actuator motors
+    //*********************
+    static RampingMotor actuator;
+
+    //**********
+    // Arm motor
+    //**********
+    static RampingMotor armRight;
+    static RampingMotor armLeft;
+
+    //*************
+    // Intake motor
+    //*************
+    static RampingMotor intakeLeft;
+    static RampingMotor intakeRight;
+
     //**********************
     // Drive train constants
     //**********************
@@ -98,12 +96,16 @@ public:
     //************************
     static const int TRAY_RAISE;
     static const int TRAY_LOWER;
+    static const int TRAY_RAISED;
+    static const int TRAY_LOWERED;
 
     //***************
     // Arm constants
     //***************
     static const int ARM_RAISE;
     static const int ARM_LOWER;
+    static const int ARM_RAISED;
+    static const int ARM_LOWERED;
 
     //*****************
     // Intake constants
@@ -111,46 +113,42 @@ public:
     static const int INTAKE_PULL;
     static const int INTAKE_PUSH;
 
-
-    // Returns the robot singlton
-    static Robot singleton();
-
-
     //**********************
     // Drive train functions
     //**********************
-    void forward(int velocity);
-    void strafe(int velocity);
-    void rotate(int velocity);
-    void drive(int forwardVal, int strafeVal, int rotateVal);
+    static void forward(int velocity);
+    static void strafe(int velocity);
+    static void rotate(int velocity);
+    static void drive(int forwardVal, int strafeVal, int rotateVal);
 
     //*****************************
     // Autonomous control functions
     //*****************************
-    void forwardDistance(double inches);
-    void strafeDistance(double inches);
-    void rotateDegrees(double degrees);
+    static void forwardDistance(double inches);
+    static void strafeDistance(double inches);
+    static void rotateDegrees(double degrees);
 
     //***********************
     // Drive sensor functions
     //***********************
-    double getDriveEncoderValue();
-    double getDriveVelocity();
+    static double getDriveEncoderValue();
+    static double getDriveVelocity();
 
     //************************
     // Tray actuator functions
     //************************
-    void actuateTray(int velocity);
+    static void actuateTray(int velocity);
+    static int getTrayPosition();
 
     //***************
     // Arm functions
     //***************
-    void armVelocity(int velocity);
+    static void armVelocity(int velocity);
 
     //*****************
     // Intake functions
     //*****************
-    void intakeVelocity(int velocity);
+    static void intakeVelocity(int velocity);
 };
 
 #endif // _ROBOT_HPP_

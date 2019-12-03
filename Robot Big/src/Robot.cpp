@@ -1,4 +1,5 @@
 #include "Robot.hpp"
+#include "../../g_inc/RampingMotor.cpp"
 
 //*********************************
 // Drive train constant definitions
@@ -7,8 +8,7 @@ const int Robot::MOVE_FORWARD = 127;
 const int Robot::MOVE_BACKWARD = -Robot::MOVE_FORWARD;
 const int Robot::STRAFE_RIGHT = 127;
 const int Robot::STRAFE_LEFT = -Robot::STRAFE_RIGHT;
-static const float ROTATE_MULT = .6;
-const int Robot::ROTATE_CW = ROTATE_MULT * 127;
+const int Robot::ROTATE_CW = 127;
 const int Robot::ROTATE_CCW = -Robot::ROTATE_CW;
 
 //***********************************
@@ -26,75 +26,130 @@ const int Robot::ARM_LOWER = -Robot::ARM_RAISE;
 //****************************
 // Intake constant definitions
 //****************************
-static float INTAKE_MULT = .75;
-const int Robot::INTAKE_PULL = INTAKE_MULT * 127;
+const int Robot::INTAKE_PULL = 127;
 const int Robot::INTAKE_PUSH = -Robot::INTAKE_PULL;
 
-//***************************
-// Singleton robot definition
-//***************************
-Robot Robot::robot_singleton = Robot();
 
+//**************
+// Robot sensors
+//**************
+pros::ADIDigitalIn Robot::armBottomLimiter = pros::ADIDigitalIn(ARM_BOTTOM_LIMITER_PORT);
+pros::ADIDigitalIn Robot::trayLowerLimiter = pros::ADIDigitalIn(TRAY_LOWER_LIMITER_PORT);
 
-// Returns the robot singleton
-Robot Robot::singleton() {
-    return robot_singleton;
-}
+//*******************
+// Drive train motors
+//*******************
+RampingMotor Robot::frontLeft  = RampingMotor(MOTOR_FRONT_LEFT_PORT,
+                                              pros::E_MOTOR_GEARSET_18,
+                                              false,
+                                              DRIVE_RAMP_SCALE);
+RampingMotor Robot::frontRight = RampingMotor(MOTOR_FRONT_RIGHT_PORT,
+                                              pros::E_MOTOR_GEARSET_18,
+                                              true,
+                                              DRIVE_RAMP_SCALE);
+RampingMotor Robot::backLeft   = RampingMotor(MOTOR_BACK_LEFT_PORT,
+                                              pros::E_MOTOR_GEARSET_18,
+                                              false,
+                                              DRIVE_RAMP_SCALE);
+RampingMotor Robot::backRight  = RampingMotor(MOTOR_BACK_RIGHT_PORT,
+                                              pros::E_MOTOR_GEARSET_18,
+                                              true,
+                                              DRIVE_RAMP_SCALE);
+
+//*********************
+// Tray actuator motors
+//*********************
+RampingMotor Robot::actuator = RampingMotor(MOTOR_TRAY_ACTUATOR_PORT,
+                                            pros::E_MOTOR_GEARSET_36,
+                                            true,
+                                            DRIVE_RAMP_SCALE);
+
+//***********
+// Arm motor
+//***********
+RampingMotor Robot::armLeft  = RampingMotor(ARM_PORT_LEFT,
+                                            pros::E_MOTOR_GEARSET_36,
+                                            false,
+                                            DRIVE_RAMP_SCALE);
+RampingMotor Robot::armRight = RampingMotor(ARM_PORT_RIGHT,
+                                            pros::E_MOTOR_GEARSET_36,
+                                            true,
+                                            DRIVE_RAMP_SCALE);
+
+//*************
+// Intake motor
+//*************
+RampingMotor Robot::intakeLeft  = RampingMotor(INTAKE_PORT_1,
+                                               pros::E_MOTOR_GEARSET_18,
+                                               true,
+                                               DRIVE_RAMP_SCALE);
+RampingMotor Robot::intakeRight = RampingMotor(INTAKE_PORT_2,
+                                               pros::E_MOTOR_GEARSET_18,
+                                               false,
+                                               DRIVE_RAMP_SCALE);
+
 
 // returns the sign of the value
-int sign(double value) {
+inline int sign(double value) {
     return (int) (value / abs(value));
 }
+
 
 //*********************************
 // Drive train function definitions
 //*********************************
 void Robot::forward(int velocity) {
     if (abs(velocity) >= DRIVE_MINIMUM_VOLTAGE) {
-        frontLeft.move(velocity);
-        frontRight.move(velocity);
-        backLeft.move(velocity);
-        backRight.move(velocity);
+        frontLeft.rampedMove(velocity);
+        frontRight.rampedMove(velocity);
+        backLeft.rampedMove(velocity);
+        backRight.rampedMove(velocity);
     }
 }
 void Robot::strafe(int velocity) {
     if (abs(velocity) >= DRIVE_MINIMUM_VOLTAGE) {
-        frontLeft.move(velocity);
-        frontRight.move(-velocity);
-        backLeft.move(-velocity);
-        backRight.move(velocity);
+        frontLeft.rampedMove(velocity);
+        frontRight.rampedMove(-velocity);
+        backLeft.rampedMove(-velocity);
+        backRight.rampedMove(velocity);
     }
 }
 void Robot::rotate(int velocity) {
     if (abs(velocity) >= DRIVE_MINIMUM_VOLTAGE) {
-        frontLeft.move(velocity);
-        frontRight.move(-velocity);
-        backLeft.move(velocity);
-        backRight.move(-velocity);
+        frontLeft.rampedMove(velocity);
+        frontRight.rampedMove(-velocity);
+        backLeft.rampedMove(velocity);
+        backRight.rampedMove(-velocity);
     }
 }
+inline void remapCircleToSquare(int &x, int &y) {
+    static const float R = 127 * std::sqrt(2); // sqrt(127^2 * 127^2) = 127 * sqrt(2)
+
+    float r = std::sqrt(x*x + y*y);
+
+    float max = std::max(x, y);
+    
+    float maxX = x / max * 127;
+    float maxY = y / max * 127;
+
+    float newX = r/R * maxX;
+    float newY = r/R * maxY;
+
+    x = newX;
+    y = newY;
+}
 void Robot::drive(int forwardVal, int strafeVal, int rotateVal) {
+    // remapCircleToSquare(forwardVal, strafeVal);
+
     int fl = forwardVal + strafeVal + rotateVal,
         fr = forwardVal - strafeVal - rotateVal,
         bl = forwardVal - strafeVal + rotateVal,
         br = forwardVal + strafeVal - rotateVal;
 
-    if (fl > 127) fl = 127;
-    else if (fl < -127) fl = -127;
-
-    if (fr > 127) fr = 127;
-    else if (fr < -127) fr = -127;
-
-    if (bl > 127) bl = 127;
-    else if (bl < -127) bl = -127;
-
-    if (br > 127) br = 127;
-    else if (br < -127) br = -127;
-
-    frontLeft.move(fl);
-    frontRight.move(fr);
-    backLeft.move(bl);
-    backRight.move(br);
+    frontLeft.rampedMove(fl);
+    frontRight.rampedMove(fr);
+    backLeft.rampedMove(bl);
+    backRight.rampedMove(br);
 }
 
 //****************************************
@@ -144,28 +199,32 @@ void Robot::rotateDegrees(double degrees) {
 // Drive sensor function definitions
 //**********************************
 double Robot::getDriveEncoderValue() {
-    double averageMagnitude = (abs(frontLeft.get_position())
-                             + abs(frontRight.get_position())
-                             + abs(backLeft.get_position())
-                             + abs(backRight.get_position())) / 4;
+    double averageMagnitude =
+            (abs(frontLeft.getMotor()->get_position())
+           + abs(frontRight.getMotor()->get_position())
+           + abs(backLeft.getMotor()->get_position())
+           + abs(backRight.getMotor()->get_position())) / 4;
 
-    int signProduct = sign(frontLeft.get_position())
-                    * sign(frontRight.get_position())
-                    * sign(backLeft.get_position())
-                    * sign(backRight.get_position());
+    int signProduct =
+            sign(frontLeft.getMotor()->get_position())
+          * sign(frontRight.getMotor()->get_position())
+          * sign(backLeft.getMotor()->get_position())
+          * sign(backRight.getMotor()->get_position());
 
     return signProduct * averageMagnitude;
 }
 double Robot::getDriveVelocity() {
-    double averageMagnitude = (abs(frontLeft.get_actual_velocity())
-                             + abs(frontRight.get_actual_velocity())
-                             + abs(backLeft.get_actual_velocity())
-                             + abs(backRight.get_actual_velocity())) / 4;
+    double averageMagnitude =
+            (abs(frontLeft.getMotor()->get_actual_velocity())
+           + abs(frontRight.getMotor()->get_actual_velocity())
+           + abs(backLeft.getMotor()->get_actual_velocity())
+           + abs(backRight.getMotor()->get_actual_velocity())) / 4;
 
-    int signProduct = sign(frontLeft.get_actual_velocity())
-                    * sign(frontRight.get_actual_velocity())
-                    * sign(backLeft.get_actual_velocity())
-                    * sign(backRight.get_actual_velocity());
+    int signProduct =
+            sign(frontLeft.getMotor()->get_actual_velocity())
+          * sign(frontRight.getMotor()->get_actual_velocity())
+          * sign(backLeft.getMotor()->get_actual_velocity())
+          * sign(backRight.getMotor()->get_actual_velocity());
 
     return signProduct * averageMagnitude;
 }
@@ -174,7 +233,7 @@ double Robot::getDriveVelocity() {
 // Tray actuator function definitions
 //***********************************
 void Robot::actuateTray(int velocity) {
-    actuator.move(velocity);
+    actuator.rampedMove(velocity);
 }
 
 //**************************
@@ -184,14 +243,14 @@ void Robot::armVelocity(int velocity) {
     if (armBottomLimiter.get_value() == HIGH && velocity < 0)
         return;
 
-    armLeft.move(velocity);
-    armRight.move(velocity);
+    armLeft.rampedMove(velocity);
+    armRight.rampedMove(velocity);
 }
 
 //****************************
 // Intake function definitions
 //****************************
 void Robot::intakeVelocity(int velocity) {
-    intakeLeft.move(velocity);
-    intakeRight.move(velocity);
+    intakeLeft.rampedMove(velocity);
+    intakeRight.rampedMove(velocity);
 }

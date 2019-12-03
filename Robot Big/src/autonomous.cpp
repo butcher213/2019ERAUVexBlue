@@ -13,9 +13,9 @@
  * from where it left off.
  */
 void autonomous() {
-    Robot::singleton().forward(127);
-    pros::delay(5);
-    Robot::singleton().forward(-127);
-    pros::delay(5);
-    Robot::singleton().forward(0);
+    // Robot::forward(127);
+    // pros::delay(2000);
+    // Robot::forward(-127);
+    // pros::delay(500);
+    // Robot::forward(0);
 }

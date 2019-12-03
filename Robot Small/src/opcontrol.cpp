@@ -41,22 +41,23 @@ static pros::Controller secondary_controller(pros::E_CONTROLLER_PARTNER);
 
 
 void driveControl() {
-    Robot::singleton().drive(primary_controller.get_analog(ROBOT_CONTROL_FORWARD),
-                             primary_controller.get_analog(ROBOT_CONTROL_STRAFE),
-                             primary_controller.get_analog(ROBOT_CONTROL_ROTATE));
+    Robot::drive(primary_controller.get_analog(ROBOT_CONTROL_FORWARD),
+                 primary_controller.get_analog(ROBOT_CONTROL_STRAFE),
+                 primary_controller.get_analog(ROBOT_CONTROL_ROTATE));
 }
 
 void trayControl() {
     int trayActuatorVelocity;
 
     if (primary_controller.get_digital(ROBOT_CONTROL_TRAY_RAISE))
-        trayActuatorVelocity = Robot::TRAY_RAISE;
+        //trayActuatorVelocity = Robot::TRAY_RAISE; // TODO set speed relative to distance
+        trayActuatorVelocity = Robot::TRAY_RAISE * Robot::TRAY_RAISED / Robot::getTrayPosition();
     else if (primary_controller.get_digital(ROBOT_CONTROL_TRAY_LOWER))
         trayActuatorVelocity = Robot::TRAY_LOWER;
     else
         trayActuatorVelocity = 0;
 
-    Robot::singleton().actuateTray(trayActuatorVelocity);
+    Robot::actuateTray(trayActuatorVelocity);
 }
 
 void armControl() {
@@ -69,7 +70,7 @@ void armControl() {
     else
         armVelocity = 0;
 
-    Robot::singleton().armVelocity(armVelocity);
+    Robot::armVelocity(armVelocity);
 }
 
 void intakeControl() {
@@ -78,11 +79,11 @@ void intakeControl() {
     if (primary_controller.get_digital(ROBOT_CONTROL_INTAKE_PULL))
         intakeVelocity = Robot::INTAKE_PULL;
     else if (primary_controller.get_digital(ROBOT_CONTROL_INTAKE_PUSH))
-        intakeVelocity = Robot::INTAKE_PUSH * 0.5;
+        intakeVelocity = Robot::INTAKE_PUSH;
     else
         intakeVelocity = 0;
 
-    Robot::singleton().intakeVelocity(intakeVelocity);
+    Robot::intakeVelocity(intakeVelocity);
 }
 
 
@@ -109,13 +110,6 @@ void opcontrol() {
 
         intakeControl();
 
-		pros::delay(10);
+		pros::delay(1);
 	}
 }
-
-class DampenedMotor: public pros::Motor {
-public:
-    std::int32_t move_dampened(const std::int8_t voltage) {
-
-    }
-};
